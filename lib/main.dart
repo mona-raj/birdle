@@ -91,6 +91,12 @@ class GuessInput extends StatelessWidget {
 
   final FocusNode _focusNode = FocusNode();
 
+  void _onSubmit() {
+    onSubmitGuess(_textEditingController.text.trim());
+    _textEditingController.clear();
+    _focusNode.requestFocus();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -109,14 +115,19 @@ class GuessInput extends StatelessWidget {
               autofocus: true,
               focusNode: _focusNode,
               onSubmitted: (String _) {
-                onSubmitGuess(_textEditingController.text.trim());
-                _textEditingController.clear();
-                _focusNode.requestFocus();
+                _onSubmit();
               },
             ),
           ),
+        ),
+        IconButton(
+          padding: EdgeInsets.zero,
+          icon: Icon(Icons.arrow_circle_up),
+          onPressed: _onSubmit,
         ),
       ],
     );
   }
 }
+
+
