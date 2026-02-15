@@ -51,11 +51,18 @@ class Tile extends StatelessWidget {
   }
 }
 
-class GamePage extends StatelessWidget {
+class GamePage extends StatefulWidget {
   GamePage({super.key});
 
+  @override
+  State<GamePage> createState() => _GamePageState();
+}
+
+class _GamePageState extends State<GamePage> {
+  // mutable state
   final Game _game = Game();
 
+  // build method
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -65,15 +72,23 @@ class GamePage extends StatelessWidget {
         children: [
           for (var guess in _game.guesses)
             Row(
-              spacing: 5.0,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                for (var letter in guess) Tile(letter.char, letter.type),
+                for (var letter in guess)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 2.5,
+                      vertical: 2.5,
+                    ),
+                    child: Tile(letter.char, letter.type),
+                  ),
               ],
             ),
           GuessInput(
             onSubmitGuess: (String guess) {
-              // TODO: handle guess
-              print(guess);
+              setState(() {
+                _game.guess(guess);
+              });
             },
           ),
         ],
@@ -129,5 +144,3 @@ class GuessInput extends StatelessWidget {
     );
   }
 }
-
-
