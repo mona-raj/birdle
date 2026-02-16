@@ -54,7 +54,7 @@ class Tile extends StatelessWidget {
 }
 
 class GamePage extends StatefulWidget {
-  GamePage({super.key});
+  const GamePage({super.key});
 
   @override
   State<GamePage> createState() => _GamePageState();
@@ -63,6 +63,12 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   // mutable state
   final Game _game = Game();
+
+  void _showMessage(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
 
   // build method
   @override
@@ -88,6 +94,15 @@ class _GamePageState extends State<GamePage> {
             ),
           GuessInput(
             onSubmitGuess: (String guess) {
+              if (guess.length != 5) {
+                _showMessage(context, 'Guess must be 5 letters.');
+                return;
+              }
+              if (!_game.isLegalGuess(guess)) {
+                _showMessage(context, 'Not in word list.');
+                return;
+              }
+
               setState(() {
                 _game.guess(guess);
               });
